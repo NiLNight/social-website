@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
@@ -17,9 +18,16 @@ def user_login(request):
                     login(request, user)
                     return HttpResponse('Authenticated successfully')
                 else:
-                    return HttpResponse('Your account is disabled')
+                    return HttpResponse('Disabled account')
             else:
-                return HttpResponse('Invalid login or password')
+                return HttpResponse('Invalid login')
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'account/login.html', {'form': form})
+
+
+@login_required
+def dashboard(request):
+   return render(request,
+                 'account/dashboard.html',
+                 {'section': 'dashboard'})
